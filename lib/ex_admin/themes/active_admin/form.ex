@@ -20,7 +20,8 @@ defmodule ExAdmin.Theme.ActiveAdmin.Form do
       Xain.form "accept-charset": "UTF-8", action: "#{action}", class: "formtastic #{model_name}",
           id: "new_#{model_name}", method: :post, enctype: "multipart/form-data", novalidate: :novalidate  do
 
-        resource = setup_resource(resource, params, model_name)
+        %{changeset: changeset, changeset_fn: changeset_fn} = conn.assigns
+        resource = setup_resource(changeset, changeset_fn, params, model_name)
 
         {html, scripts_list} =
           build_main_block(conn, resource, model_name, items)

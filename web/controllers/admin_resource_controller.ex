@@ -55,6 +55,8 @@ defmodule ExAdmin.AdminResourceController do
     changeset = ExAdmin.Repo.changeset(changeset_fn, resource, params[defn.resource_name])
 
     conn = Plug.Conn.assign(conn, :ea_required, changeset.required)
+    conn = Plug.Conn.assign(conn, :changeset_fn, changeset_fn)
+    conn = Plug.Conn.assign(conn, :changeset, changeset.changeset)
     {conn, params, resource} = handle_after_filter(conn, :edit, defn, params, resource)
     contents = do_form_view(conn, resource, params)
 
@@ -69,6 +71,8 @@ defmodule ExAdmin.AdminResourceController do
     changeset = ExAdmin.Repo.changeset(changeset_fn, resource, params[defn.resource_name])
 
     conn = Plug.Conn.assign(conn, :ea_required, changeset.required)
+    conn = Plug.Conn.assign(conn, :changeset_fn, changeset_fn)
+    conn = Plug.Conn.assign(conn, :changeset, changeset.changeset)
     {conn, params, resource} = handle_after_filter(conn, :new, defn, params, resource)
     contents = do_form_view(conn, resource, params)
 

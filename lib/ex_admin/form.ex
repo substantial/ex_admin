@@ -491,12 +491,12 @@ defmodule ExAdmin.Form do
     end
   end
 
-  def setup_resource(resource, params, model_name) do
+  def setup_resource(changeset, changeset_fn, params, model_name) do
     model_name = String.to_atom(model_name)
     case params[model_name] do
-      nil -> resource
+      nil -> ExAdmin.Changeset.get_data((changeset))
       model_params ->
-        struct(resource, Map.to_list(model_params))
+        changeset_fn.(changeset.data, model_params).data
     end
   end
 

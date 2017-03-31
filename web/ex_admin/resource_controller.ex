@@ -37,10 +37,14 @@ defmodule ExAdmin.ResourceController do
       end
 
       defp handle_changeset_error(conn, defn, changeset, params) do
+        changeset_fn = defn.__struct__.changeset_fn(defn, :update)
+        changeset = ExAdmin.Repo.changeset(changeset_fn, changeset.data, params[defn.resource_name])
+
         conn = put_flash(conn, :inline_error, changeset.errors)
-        |> Plug.Conn.assign(:changeset, changeset)
+        |> Plug.Conn.assign(:changeset, changeset.changeset)
         |> Plug.Conn.assign(:ea_required, changeset.required)
-        contents = do_form_view(conn, ExAdmin.Changeset.get_data(changeset), params)
+        |> Plug.Conn.assign(:changeset_fn, changeset_fn)
+        contents = do_form_view(conn, ExAdmin.Changeset.get_data(changeset.changeset), params)
         render(conn, "admin.html", html: contents, filters: nil)
       end
 

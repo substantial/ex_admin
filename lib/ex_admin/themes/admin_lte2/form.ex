@@ -19,7 +19,8 @@ defmodule ExAdmin.Theme.AdminLte2.Form do
       Xain.form "accept-charset": "UTF-8", action: "#{action}", class: "form-horizontal",
           id: "new_#{model_name}", method: :post, enctype: "multipart/form-data", novalidate: :novalidate  do
 
-        resource = setup_resource(resource, params, model_name)
+        %{changeset: changeset, changeset_fn: changeset_fn} = conn.assigns
+        resource = setup_resource(changeset, changeset_fn, params, model_name)
         {html, scripts_list} =
           build_main_block(conn, resource, model_name, items)
           |> Enum.reduce({[], []}, fn({h, o}, {acc_h, acc_o}) ->
